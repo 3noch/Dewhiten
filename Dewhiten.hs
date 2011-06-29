@@ -1,5 +1,5 @@
 import Control.Monad (mapM_)
-import DewhitenCore (fixLines)
+import DewhitenCore (dewhitenString)
 import FileHelper (findFiles)
 import System (getArgs)
 import System.Console.GetOpt
@@ -52,7 +52,9 @@ help = usageInfo header options
 
 dewhiten :: [Flag] -> FilePath -> IO ()
 dewhiten flags file = do
-    putStrLn $ "Dewhitening " ++ file
     contents <- readFile file
-    let fixedLines = fixLines (lines contents)
-    writeFile file $! unlines fixedLines
+    let newContents = dewhitenString contents
+    if length contents /= length newContents
+        then do putStrLn $ "Dewhitened " ++ file
+                writeFile file newContents
+        else return ()

@@ -1,12 +1,16 @@
 module DewhitenCore where
-    fixLines :: [String] -> [String]
-    fixLines [] = []
-    fixLines x  = fixLines (init x) ++ [fixLine (penultimate x "") (last x)]
+    dewhitenString :: String -> String
+    dewhitenString = unlines . dewhitenLines . lines
     
-    fixLine :: String -> String -> String
-    fixLine penultLine ultLine
-        | all isWhite ultLine = takeWhile isWhite (penultLine)
-        | otherwise = trimLine ultLine
+    dewhitenLines :: [String] -> [String]
+    dewhitenLines []     = []
+    dewhitenLines [x]    = [dewhitenLine (x, "")]
+    dewhitenLines (x:xs) = dewhitenLine (x, head xs) : dewhitenLines xs
+    
+    dewhitenLine :: (String, String) -> String
+    dewhitenLine linePair
+        | all isWhite (fst linePair) = takeWhile isWhite (snd linePair)
+        | otherwise = trimLine (fst linePair)
     
     trimLine :: String -> String
     trimLine = reverse . dropWhile isWhite . reverse
@@ -20,8 +24,3 @@ module DewhitenCore where
     isWhite '\n' = True
     isWhite '\r' = True
     isWhite _    = False
-    
-    penultimate :: [a] -> a -> a
-    penultimate x error = if length x > 1
-                          then (last . init) x
-                          else error
