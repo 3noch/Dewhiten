@@ -1,8 +1,8 @@
 module FileHelper where
     import Control.Monad (filterM)
-    import System.Directory 
+    import System.Directory
     import System.FilePath
-    import System.FilePath.Glob 
+    import System.FilePath.Glob
     
     findFiles :: Bool -> Pattern -> FilePath -> IO [FilePath]
     findFiles recurse pattern dir = do
@@ -29,7 +29,7 @@ module FileHelper where
         exists <- doesFileExist file
         p <- if exists
                  then getPermissions file
-                 else return noPermissions 
+                 else return noPermissions
         return $ exists && readable p && writable p
     
     getDirItems :: FilePath -> IO [FilePath]
@@ -38,7 +38,7 @@ module FileHelper where
         return items
     
     noPermissions = Permissions { readable   = False
-                                , writable   = False 
+                                , writable   = False
                                 , executable = False
                                 , searchable = False
                                 }
