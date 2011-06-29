@@ -52,15 +52,7 @@ help = usageInfo header options
 
 dewhiten :: [Flag] -> FilePath -> IO ()
 dewhiten flags file = do
-    putStrLn $ "Dewhitening " ++ file ++ "\n"
+    putStrLn $ "Dewhitening " ++ file
     contents <- readFile file
-    case contents of { [] -> return contents; _ -> return ""}
-    let fixedLines = fixLines $ lines contents
-    writeFile file (unlines fixedLines)
-
-readFileNow :: FilePath -> IO String
-readFileNow file = do
-    contents <- readFile file
-    case length contents of
-        1 -> return contents
-        _ -> return contents
+    let fixedLines = fixLines (lines contents)
+    writeFile file $! unlines fixedLines
