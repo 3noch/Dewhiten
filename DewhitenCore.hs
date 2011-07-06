@@ -1,8 +1,8 @@
 module DewhitenCore where
-    data IndentOptions = UseBlanks | CopyIndent
+    data IndentOptions = UseBlanks | CopyIndent deriving (Show,Eq)
     
-    dewhitenString :: String -> String
-    dewhitenString = unlines . (dewhitenLines CopyIndent) . lines
+    dewhitenString :: IndentOptions -> String -> String
+    dewhitenString indent = unlines . (dewhitenLines indent) . lines
     
     dewhitenLines :: IndentOptions -> [String] -> [String]
     dewhitenLines UseBlanks  = (map trimLine) . trimList

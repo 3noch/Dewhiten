@@ -1,6 +1,6 @@
 import Control.Monad
-import DewhitenCore (dewhitenString)
-import FileHelper (findFiles)
+import DewhitenCore
+import FileHelper
 import System
 import System.Console.GetOpt
 import System.Directory (doesDirectoryExist)
@@ -16,17 +16,23 @@ main = do
     validateArguments nonFlags
     let pattern = nonFlags !! 0
     let dir     = nonFlags !! 1
-    dewhiten (Recursive `elem` flags) pattern dir
+    dewhiten (useRecursion flags) (useBlanks flags) pattern dir
+    where useRecursion flags = if RecursiveSearch `elem` flags
+                                   then Recursive
+                                   else NonRecursive
+          useBlanks flags    = if BlankLines `elem` flags
+                                   then UseBlanks
+                                   else CopyIndent
 
-dewhiten :: Bool -> String -> String -> IO ()
-dewhiten recurse pattern dir = do
+dewhiten :: RecursionOptions -> IndentOptions -> String -> String -> IO ()
+dewhiten recurse indent pattern dir = do
     files <- findFiles recurse (compile pattern) dir
-    mapM_ dewhitenFile files
+    mapM_ (dewhitenFile indent) files
 
-dewhitenFile :: FilePath -> IO ()
-dewhitenFile file = do
+dewhitenFile :: IndentOptions -> FilePath -> IO ()
+dewhitenFile indent file = do
     contents <- readFile file
-    let newContents = dewhitenString contents
+    let newContents = dewhitenString indent contents
     if length contents /= length newContents
         then do putStrLn $ "Dewhitened " ++ file
                 writeFile file newContents
@@ -46,7 +52,7 @@ printHelp = do
     putStrLn help
     exitWith ExitSuccess
 
-data Flag = Recursive
+data Flag = RecursiveSearch
           | BlankLines
           | KeepOriginals
           | Version
@@ -54,7 +60,7 @@ data Flag = Recursive
           deriving (Show,Eq)
 
 options :: [OptDescr Flag]
-options = [ Option ['R','r'] ["recursive"] (NoArg Recursive) "apply to the given directory recursively"
+options = [ Option ['R','r'] ["recursive"] (NoArg RecursiveSearch) "apply to the given directory recursively"
           , Option ['b'] ["blank"] (NoArg BlankLines) "convert lines with only white-space into blank lines"
           , Option ['o'] ["keep-originals"] (NoArg KeepOriginals) "keep original files by appending .orig to their names"
           , Option ['V'] ["version"] (NoArg Version) "show version information"

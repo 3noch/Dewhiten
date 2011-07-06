@@ -4,12 +4,14 @@ module FileHelper where
     import System.FilePath
     import System.FilePath.Glob
     
-    findFiles :: Bool -> Pattern -> FilePath -> IO [FilePath]
+    data RecursionOptions = Recursive | NonRecursive deriving (Show,Eq)
+    
+    findFiles :: RecursionOptions -> Pattern -> FilePath -> IO [FilePath]
     findFiles recurse pattern dir = do
         items     <- getDirItems dir
         files     <- filterM isGoodFile (globFiles items)
         dirs      <- filterM isGoodDir items
-        moreFiles <- if recurse
+        moreFiles <- if recurse == Recursive
                          then mapM (findFiles recurse pattern) dirs
                          else return []
         return $ files ++ concat moreFiles
