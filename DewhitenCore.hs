@@ -11,14 +11,14 @@ module DewhitenCore where
     indentLines :: [String] -> [String]
     indentLines []  = []
     indentLines [x] = [trimLine x]
-    indentLines xs  = indentLines (init newList)
-                      where newList = take lenLess2 xs ++ indentPair (penultimate xs) (last xs)
-                            lenLess2 = length xs - 2
-                            penultimate = last . init
+    indentLines xs  = indentLines newList ++ [ultimate]
+                      where newList     = take lenLess2 xs ++ [indentPair penultimate ultimate]
+                            lenLess2    = length xs - 2
+                            penultimate = last (init xs)
+                            ultimate    = last xs
     
-    indentPair :: String -> String -> [String]
-    indentPair a b = [if isWhiteLine a then takeWhile isWhite b else a,
-                      if isWhiteLine b then b else b]
+    indentPair :: String -> String -> String
+    indentPair a b = if isWhiteLine a then takeWhile isWhite b else a
     
     trimNonWhiteLine :: String -> String
     trimNonWhiteLine a
