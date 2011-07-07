@@ -1,0 +1,39 @@
+=====================================================================
+I. INTRODUCTION
+=====================================================================
+Dewhiten is a small utility for formatting white space in code
+source files. It removes extraneous white space at the ends of lines,
+extraneous blank lines at the end of files, and formats indentation
+for blank lines elsewhere in a file.
+
+Dewhiten was written in Haskell around June and July of 2011. Its
+author is Elliot Cameron (http://www.3noch.com/). You can access
+the git repository at git@github.com:3noch/Dewhiten.git.
+
+Dewhiten is released under the GPLv3 license, which can be read at
+http://www.gnu.org/licenses/gpl.html.
+
+
+=====================================================================
+II. DEPENDENCIES
+=====================================================================
+Dewhiten has been tested with Glasgow Haskell Compiler 6.12.1. 
+
+It requires the following cabal packages:
+
+    1. System.FilePath.Glob (http://hackage.haskell.org/package/Glob)
+       Install via
+           $ cabal update
+           $ cabal install Glob
+
+
+=====================================================================
+III. BUILDING
+=====================================================================
+To build dewhiten, use the following command:
+
+    $ ghc -o dewhiten --make Dewhiten
+
+Then run it via
+
+    $ ./dewhiten

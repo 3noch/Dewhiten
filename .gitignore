@@ -1,2 +1,4 @@
+#ignore compiled binaries and build artifacts
+dewhiten
 *.hi
 *.o
