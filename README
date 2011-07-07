@@ -13,6 +13,8 @@ the git repository at git@github.com:3noch/Dewhiten.git.
 Dewhiten is released under the GPLv3 license, which can be read at
 http://www.gnu.org/licenses/gpl.html.
 
+This software is provided WITHOUT ANY WARRANTY OR GUARANTEE OF ANY
+KIND. USE AT YOUR OWN RISK.
 
 =====================================================================
 II. DEPENDENCIES
@@ -22,7 +24,7 @@ Dewhiten has been tested with Glasgow Haskell Compiler 6.12.1.
 It requires the following cabal packages:
 
     1. System.FilePath.Glob (http://hackage.haskell.org/package/Glob)
-       Install via
+       Install this package like this
            $ cabal update
            $ cabal install Glob
 
@@ -34,6 +36,16 @@ To build dewhiten, use the following command:
 
     $ ghc -o dewhiten --make Dewhiten
 
-Then run it via
+Then run it like this
 
     $ ./dewhiten
+
+
+If you have runhaskell or runghc installed, you can also run dewhiten
+without compiling it like this
+
+    $ runhaskell Dewhiten
+
+    or
+
+    $ runghc Dewhiten

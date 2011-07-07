@@ -86,5 +86,5 @@ validateArguments nonFlags
 help = usageInfo header options
        where header =  "Usage: dewhiten [OPTION]... PATTERN DIRECTORY\n"
                     ++ "Search for the glob PATTERN in DIRECTORY and remove extraneous white-space from the files that match the search.\n"
-                    ++ "Example: dewhiten -R *.py ./\n\n"
+                    ++ "Example: dewhiten -R '*.py' ./\n\n"
                     ++ "Possible values for OPTION are:"
