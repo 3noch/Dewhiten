@@ -2,3 +2,4 @@
 dewhiten
 *.hi
 *.o
+*.orig

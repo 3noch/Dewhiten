@@ -11,32 +11,30 @@ main :: IO ()
 main = do
     args <- getArgs
     (flags, nonFlags) <- parseOptions args
-    when (Version `elem` flags) printVersion
-    when (Help    `elem` flags) printHelp
+    when (ShowVersion `elem` flags) printVersion
+    when (ShowHelp    `elem` flags) printHelp
     validateArguments nonFlags
-    let pattern = nonFlags !! 0
-    let dir     = nonFlags !! 1
-    dewhiten (useRecursion flags) (useBlanks flags) pattern dir
-    where useRecursion flags = if RecursiveSearch `elem` flags
-                                   then Recursive
-                                   else NonRecursive
-          useBlanks flags    = if BlankLines `elem` flags
-                                   then UseBlanks
-                                   else CopyIndent
+    dewhiten (getConfig flags) (nonFlags !! 0) (nonFlags !! 1)
 
-dewhiten :: RecursionOptions -> IndentOptions -> String -> String -> IO ()
-dewhiten recurse indent pattern dir = do
-    files <- findFiles recurse (compile pattern) dir
-    mapM_ (dewhitenFile indent) files
+dewhiten :: Config -> String -> String -> IO ()
+dewhiten config pattern dir = do
+    files <- findFiles (useRecursion config) (compile pattern) dir
+    mapM_ (dewhitenFile config) files
 
-dewhitenFile :: IndentOptions -> FilePath -> IO ()
-dewhitenFile indent file = do
-    contents <- readFile file
-    let newContents = dewhitenString indent contents
-    if length contents /= length newContents
+dewhitenFile :: Config -> FilePath -> IO ()
+dewhitenFile config file = do
+    oldContents <- readFile file
+    let newContents = dewhitenString (useBlankLines config) oldContents
+    if length oldContents /= length newContents
         then do putStrLn $ "Dewhitened " ++ file
-                writeFile file newContents
+                overwriteFile config file oldContents newContents
         else return ()
+
+overwriteFile :: Config -> FilePath -> String -> String -> IO ()
+overwriteFile config file oldContents newContents
+    | keepOriginals config = do writeFile (file <.> "orig") oldContents
+                                writeFile file newContents
+    | otherwise            = writeFile file newContents
 
 printVersion :: IO ()
 printVersion = do
@@ -52,19 +50,30 @@ printHelp = do
     putStrLn help
     exitWith ExitSuccess
 
-data Flag = RecursiveSearch
-          | BlankLines
+data Config = Config { useRecursion  :: Bool
+                     , useBlankLines :: Bool
+                     , keepOriginals :: Bool
+                     }
+
+getConfig :: [Flag] -> Config
+getConfig flags = Config { useRecursion  = SearchRecursively `elem` flags
+                         , useBlankLines = UseBlankLines     `elem` flags
+                         , keepOriginals = KeepOriginals     `elem` flags
+                         }
+
+data Flag = SearchRecursively
+          | UseBlankLines
           | KeepOriginals
-          | Version
-          | Help
+          | ShowVersion
+          | ShowHelp
           deriving (Show,Eq)
 
 options :: [OptDescr Flag]
-options = [ Option ['R','r'] ["recursive"] (NoArg RecursiveSearch) "apply to the given directory recursively"
-          , Option ['b'] ["blank"] (NoArg BlankLines) "convert lines with only white-space into blank lines"
+options = [ Option ['R','r'] ["recursive"] (NoArg SearchRecursively) "apply to the given directory recursively"
+          , Option ['b'] ["blank"] (NoArg UseBlankLines) "convert lines with only white-space into blank lines"
           , Option ['o'] ["keep-originals"] (NoArg KeepOriginals) "keep original files by appending .orig to their names"
-          , Option ['V'] ["version"] (NoArg Version) "show version information"
-          , Option ['h','?'] ["help"] (NoArg Help) "show this help"
+          , Option ['V'] ["version"] (NoArg ShowVersion) "show version information"
+          , Option ['h','?'] ["help"] (NoArg ShowHelp) "show this help"
           ]
 
 parseOptions :: [String] -> IO ([Flag], [String])
