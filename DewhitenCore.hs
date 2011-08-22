@@ -3,7 +3,7 @@ module DewhitenCore where
     dewhitenString indent = unlines . (dewhitenLines indent) . lines
 
     dewhitenLines :: Bool -> [String] -> [String]
-    dewhitenLines True  = (map trimLine) . trimList                        -- use blank lines
+    dewhitenLines True  = (map trimLine) . trimList                       -- use blank lines
     dewhitenLines False = indentLines . (map trimNonWhiteLine) . trimList -- copy indentation
 
     indentLines :: [String] -> [String]

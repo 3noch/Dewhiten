@@ -3,3 +3,4 @@ dewhiten
 *.hi
 *.o
 *.orig
+*.sublime-project
