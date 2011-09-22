@@ -1,12 +1,18 @@
 module DewhitenCore where
-    dewhitenString :: Bool -> String -> String
-    dewhitenString indent = unlines . (dewhitenLines indent) . lines
+    type Lines    = [String]
+    type Modifier = Lines -> Lines
 
-    dewhitenLines :: Bool -> [String] -> [String]
-    dewhitenLines True  = (map trimLine) . trimList                       -- use blank lines
-    dewhitenLines False = indentLines . (map trimNonWhiteLine) . trimList -- copy indentation
+    -- Functions that modify a list of lines
+    addBlankIndent  = indentLines . (map trimNonWhiteLine) :: Modifier
+    noBlankIndent   = map trimLine                         :: Modifier
+    addTrailingLine = (++ [""]) . trimList                 :: Modifier
+    noTrailingLine  = trimList                             :: Modifier
 
-    indentLines :: [String] -> [String]
+    -- Simple wrapper for applying dewhiten to a string instead of a list of lines
+    dewhitenString :: Modifier -> Modifier -> String -> String
+    dewhitenString lineModifier fileModifier = unlines . lineModifier . fileModifier . lines
+
+    indentLines :: Lines -> Lines
     indentLines []  = []
     indentLines [x] = [trimLine x]
     indentLines xs  = indentLines newList ++ [ultimate]
@@ -26,7 +32,6 @@ module DewhitenCore where
     trimLine :: String -> String
     trimLine = reverse . dropWhile isWhite . reverse
 
-    trimList :: [String] -> [String]
     trimList = reverse . dropWhile isWhiteLine . reverse
 
     isWhiteLine :: String -> Bool

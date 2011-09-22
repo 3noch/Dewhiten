@@ -34,7 +34,7 @@ III. BUILDING
 =====================================================================
 To build dewhiten, use the following command:
 
-    $ ghc -o dewhiten --make Dewhiten
+    $ make
 
 Then run it like this
 

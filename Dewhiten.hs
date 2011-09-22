@@ -1,9 +1,9 @@
 import Control.Monad
 import DewhitenCore
+import Directory (doesDirectoryExist)
 import FileHelper
 import System
 import System.Console.GetOpt
-import System.Directory (doesDirectoryExist)
 import System.FilePath
 import System.FilePath.Glob (compile)
 
@@ -14,27 +14,31 @@ main = do
     when (ShowVersion `elem` flags) printVersion
     when (ShowHelp    `elem` flags) printHelp
     validateArguments nonFlags
-    dewhiten (getConfig flags) (nonFlags !! 0) (nonFlags !! 1)
+    dewhiten flags (nonFlags !! 0) (nonFlags !! 1)
 
-dewhiten :: Config -> String -> String -> IO ()
-dewhiten config pattern dir = do
-    files <- findFiles (useRecursion config) (compile pattern) dir
-    mapM_ (dewhitenFile config) files
+dewhiten :: [Flag] -> String -> String -> IO ()
+dewhiten cfg pattern dir = do
+    files <- findFiles (Recursive `elem` cfg) (compile pattern) dir
+    mapM_ (dewhitenFile cfg) files
 
-dewhitenFile :: Config -> FilePath -> IO ()
-dewhitenFile config file = do
+dewhitenFile :: [Flag] -> FilePath -> IO ()
+dewhitenFile cfg file = do
     oldContents <- readFile file
-    let newContents = dewhitenString (useBlankLines config) oldContents
+    let lineModifier = if AddBlankIndent  `elem` cfg then addBlankIndent  else noBlankIndent
+    let fileModifier = if AddTrailingLine `elem` cfg then addTrailingLine else noTrailingLine
+    let newContents = dewhitenString lineModifier fileModifier oldContents
     if length oldContents /= length newContents
         then do putStrLn $ "Dewhitened " ++ file
-                overwriteFile config file oldContents newContents
+                overwriteFile (KeepOriginals `elem` cfg) file oldContents newContents
         else return ()
 
-overwriteFile :: Config -> FilePath -> String -> String -> IO ()
-overwriteFile config file oldContents newContents
-    | keepOriginals config = do writeFile (file <.> "orig") oldContents
-                                writeFile file newContents
-    | otherwise            = writeFile file newContents
+overwriteFile :: Bool -> FilePath -> String -> String -> IO ()
+overwriteFile keepOrig file oldContents newContents
+    | keepOrig  = do writeFile (file <.> "orig") oldContents
+                     doWrite
+    | otherwise = doWrite
+    where doWrite = do putStrLn $ "Dewhitened " ++ file
+                       writeFile file newContents
 
 printVersion :: IO ()
 printVersion = do
@@ -50,29 +54,20 @@ printHelp = do
     putStrLn help
     exitWith ExitSuccess
 
-data Config = Config { useRecursion  :: Bool
-                     , useBlankLines :: Bool
-                     , keepOriginals :: Bool
-                     }
-
-getConfig :: [Flag] -> Config
-getConfig flags = Config { useRecursion  = SearchRecursively `elem` flags
-                         , useBlankLines = UseBlankLines     `elem` flags
-                         , keepOriginals = KeepOriginals     `elem` flags
-                         }
-
-data Flag = SearchRecursively
-          | UseBlankLines
+data Flag = Recursive
+          | AddBlankIndent
+          | AddTrailingLine
           | KeepOriginals
           | ShowVersion
           | ShowHelp
           deriving (Show,Eq)
 
 options :: [OptDescr Flag]
-options = [ Option ['R','r'] ["recursive"] (NoArg SearchRecursively) "apply to the given directory recursively"
-          , Option ['b'] ["blank"] (NoArg UseBlankLines) "convert lines with only white-space into blank lines"
-          , Option ['o'] ["keep-originals"] (NoArg KeepOriginals) "keep original files by appending .orig to their names"
-          , Option ['V'] ["version"] (NoArg ShowVersion) "show version information"
+options = [ Option ['R','r'] ["recursive"] (NoArg Recursive) "search the given directory recursively"
+          , Option ['d'] ["indent"] (NoArg AddBlankIndent) "add correct indentation to blank lines and lines with only white-space"
+          , Option ['t'] ["trailing"] (NoArg AddTrailingLine) "ensure each file has exactly one trailing blank line"
+          , Option ['o'] ["keep-originals"] (NoArg KeepOriginals) "keep original files by appending '.orig` to their names"
+          , Option ['V', 'v'] ["version"] (NoArg ShowVersion) "show version information"
           , Option ['h','?'] ["help"] (NoArg ShowHelp) "show this help"
           ]
 
