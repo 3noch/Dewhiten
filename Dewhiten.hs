@@ -28,8 +28,7 @@ dewhitenFile cfg file = do
     let fileModifier = if AddTrailingLine `elem` cfg then addTrailingLine else noTrailingLine
     let newContents = dewhitenString lineModifier fileModifier oldContents
     if length oldContents /= length newContents
-        then do putStrLn $ "Dewhitened " ++ file
-                overwriteFile (KeepOriginals `elem` cfg) file oldContents newContents
+        then overwriteFile (KeepOriginals `elem` cfg) file oldContents newContents
         else return ()
 
 overwriteFile :: Bool -> FilePath -> String -> String -> IO ()
