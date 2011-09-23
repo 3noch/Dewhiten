@@ -30,7 +30,7 @@ It requires the following cabal packages:
 
 
 =====================================================================
-III. BUILDING
+III. BUILDING AND INSTALLING
 =====================================================================
 To build dewhiten, use the following command:
 
@@ -39,6 +39,10 @@ To build dewhiten, use the following command:
 Then run it like this
 
     $ ./dewhiten
+
+To install:
+
+    $ sudo make install
 
 
 If you have runhaskell or runghc installed, you can also run dewhiten
