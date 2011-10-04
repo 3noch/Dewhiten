@@ -19,7 +19,8 @@ KIND. USE AT YOUR OWN RISK.
 =====================================================================
 II. DEPENDENCIES
 =====================================================================
-Dewhiten has been tested with Glasgow Haskell Compiler 6.12.1. 
+Dewhiten has been tested with Glasgow Haskell Compiler versions
+6.12.1, 7.0.3, and 7.0.4.
 
 It requires the following cabal packages:
 
