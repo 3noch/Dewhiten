@@ -7,7 +7,7 @@ for blank lines elsewhere in a file.
 
 Dewhiten was written in Haskell around June and July of 2011. Its
 author is Elliot Cameron (http://www.3noch.com/). You can access the
-git repository at [http://github.com:CovenantEyes/Dewhiten].
+git repository at http://github.com:CovenantEyes/Dewhiten.
 
 Dewhiten is released under the GPLv3 license, which can be read at
 http://www.gnu.org/licenses/gpl.html.
@@ -24,6 +24,7 @@ Dewhiten has been tested with Glasgow Haskell Compiler versions
 It requires the following cabal packages:
 
 1. [`System.FilePath.Glob`](http://hackage.haskell.org/package/Glob)
+
    Install this package like this
        $ sudo cabal update
        $ sudo cabal install Glob
@@ -35,7 +36,7 @@ To build `dewhiten`, use the following command:
 
     $ make
 
-Then run it like this
+Then run it like this:
 
     $ ./dewhiten
 
@@ -45,10 +46,10 @@ To install:
 
 
 If you have `runhaskell` or `runghc` installed, you can also run
-`dewhiten` without compiling it like this
+`dewhiten` without compiling it like this:
 
     $ runhaskell Dewhiten
 
-    or
+or
 
     $ runghc Dewhiten
