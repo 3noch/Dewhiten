@@ -5,12 +5,10 @@ files. It removes extraneous white space at the ends of lines,
 extraneous blank lines at the end of files, and formats indentation
 for blank lines elsewhere in a file.
 
-Dewhiten was written in Haskell around June and July of 2011. Its
-author is [Elliot Cameron](http://www.3noch.com/). You can access the
-git repository at http://github.com:CovenantEyes/Dewhiten.
-
-Dewhiten is released under the GPLv3 license, which can be read at
-http://www.gnu.org/licenses/gpl.html.
+Dewhiten was written in [Haskell](http://haskell.org/) around June and
+July of 2011. Its author is [Elliot Cameron](http://www.3noch.com/).
+You can access the git repository at
+http://github.com:CovenantEyes/Dewhiten.
 
 This software is provided WITHOUT ANY WARRANTY OR GUARANTEE OF ANY
 KIND. USE AT YOUR OWN RISK.
@@ -18,10 +16,12 @@ KIND. USE AT YOUR OWN RISK.
 
 Dependencies
 ============
-Dewhiten has been tested with Glasgow Haskell Compiler versions
+Dewhiten has been tested with
+[Glasgow Haskell Compiler](http://www.haskell.org/ghc/) versions
 6.12.1, 7.0.3, and 7.0.4.
 
-It requires the following cabal packages:
+It requires the following [cabal](http://www.haskell.org/cabal/)
+packages:
 
 1.  [`System.FilePath.Glob`](http://hackage.haskell.org/package/Glob)
 
@@ -61,3 +61,9 @@ Usage
 For help on using Dewhiten, run this after building it:
 
     $ ./dewhiten --help
+
+
+Licensing
+=========
+Dewhiten is released under the
+[GPLv3](http://www.gnu.org/licenses/gpl.html) license.
