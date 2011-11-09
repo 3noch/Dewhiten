@@ -33,7 +33,10 @@ packages:
 
 Building and Installing
 =======================
-To build `dewhiten`, use the following command:
+
+To build `dewhiten`, you'll need
+[GNU Make](http://www.gnu.org/s/make/) or some other `make` utility.
+Build `dewhiten` like this:
 
     $ make
 
