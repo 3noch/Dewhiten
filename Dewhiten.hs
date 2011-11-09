@@ -45,7 +45,7 @@ printVersion = do
              ++ "License: GPLv3 (http://www.gnu.org/licenses/gpl.html)\n"
              ++ "Written in Haskell, June, 2011\n"
              ++ "By Elliot Cameron, http://www.3noch.com/\n"
-             ++ "git Repository: https://github.com/3noch/Dewhiten\n"
+             ++ "git Repository: http://github.com/CovenantEyes/Dewhiten\n"
     exitWith ExitSuccess
 
 printHelp :: IO ()
