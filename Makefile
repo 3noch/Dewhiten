@@ -10,7 +10,7 @@ install: all
 	install dewhiten $(BIN)/$(EXE)
 
 clean:
-	rm *.o *.hi $(EXE)
+	rm -f *.o *.hi $(EXE)
 
 $(EXE): $(wildcard *.hs)
-	ghc -o $(EXE) --make $(MAIN)
+	ghc -O2 -o $(EXE) --make $(MAIN)
