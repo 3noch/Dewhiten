@@ -1,6 +1,6 @@
 module FileHelper where
     import Control.Monad (filterM)
-    import Directory
+    import System.Directory
     import System.FilePath
     import System.FilePath.Glob
 

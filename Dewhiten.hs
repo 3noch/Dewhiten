@@ -1,8 +1,7 @@
 import Control.Monad
 import DewhitenCore
-import Directory (doesDirectoryExist)
 import FileHelper
-import System
+import System.Directory (doesDirectoryExist)
 import System.Console.GetOpt
 import System.FilePath
 import System.FilePath.Glob (compile)
