@@ -1,4 +1,6 @@
 module DewhitenCore where
+    import Data.Char (isSpace)
+
     type Lines    = [String]
     type Modifier = Lines -> Lines
 
@@ -22,7 +24,7 @@ module DewhitenCore where
                             ultimate    = last xs
 
     indentPair :: String -> String -> String
-    indentPair a b = if isWhiteLine a then takeWhile isWhite b else a
+    indentPair a b = if isWhiteLine a then takeWhile isSpace b else a
 
     trimNonWhiteLine :: String -> String
     trimNonWhiteLine a
@@ -30,16 +32,9 @@ module DewhitenCore where
         | otherwise     = trimLine a
 
     trimLine :: String -> String
-    trimLine = reverse . dropWhile isWhite . reverse
+    trimLine = reverse . dropWhile isSpace . reverse
 
     trimList = reverse . dropWhile isWhiteLine . reverse
 
     isWhiteLine :: String -> Bool
-    isWhiteLine = all isWhite
-
-    isWhite :: Char -> Bool
-    isWhite ' '  = True
-    isWhite '\t' = True
-    isWhite '\n' = True
-    isWhite '\r' = True
-    isWhite _    = False
+    isWhiteLine = all isSpace
