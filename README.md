@@ -18,7 +18,7 @@ Dependencies
 ============
 Dewhiten has been tested with
 [Glasgow Haskell Compiler](http://www.haskell.org/ghc/) versions
-6.12.1, 7.0.3, and 7.0.4.
+6.12.1, 7.0.3, 7.0.4, and 7.4.1.
 
 It requires the following [cabal](http://www.haskell.org/cabal/)
 packages:

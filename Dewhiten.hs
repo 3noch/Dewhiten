@@ -3,6 +3,8 @@ import DewhitenCore
 import FileHelper
 import System.Directory (doesDirectoryExist)
 import System.Console.GetOpt
+import System.Environment (getArgs)
+import System.Exit
 import System.FilePath
 import System.FilePath.Glob (compile)
 
@@ -79,11 +81,12 @@ validateArguments :: [String] -> IO ()
 validateArguments nonFlags
     | length nonFlags /= 2 = error $ "Unrecognized syntax.\n" ++ help
     | otherwise            = checkDirectory (nonFlags !! 1)
-    where checkDirectory dir = do
-              dirExists <- doesDirectoryExist dir
-              if dirExists
-                  then return ()
-                  else error $ "Given directory does not exist.\n" ++ help
+    where
+        checkDirectory dir = do
+            dirExists <- doesDirectoryExist dir
+            if dirExists
+            then return ()
+            else error $ "Given directory does not exist.\n" ++ help
 
 help = usageInfo header options
        where header =  "Usage: dewhiten [OPTION]... PATTERN DIRECTORY\n"

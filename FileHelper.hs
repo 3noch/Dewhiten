@@ -20,27 +20,21 @@ module FileHelper where
     isGoodDir dir = do
         exists <- doesDirectoryExist dir
         p <- if exists
-                then getPermissions dir
-                else return noPermissions
+             then getPermissions dir
+             else return emptyPermissions
         return $ exists && readable p && writable p && searchable p
 
     isGoodFile :: FilePath -> IO Bool
     isGoodFile file = do
         exists <- doesFileExist file
         p <- if exists
-                 then getPermissions file
-                 else return noPermissions
+             then getPermissions file
+             else return emptyPermissions
         return $ exists && readable p && writable p
-
+    
     getDirItems :: FilePath -> IO [FilePath]
     getDirItems dir = do
         items <- globDir1 globStar dir
         return items
-
-    noPermissions = Permissions { readable   = False
-                                , writable   = False
-                                , executable = False
-                                , searchable = False
-                                }
 
     globStar = compile "*"
