@@ -1,4 +1,4 @@
-Introduction
+Itroduction
 ============
 Dewhiten is a small utility for formatting white space in code source
 files. It removes extraneous white space at the ends of lines,
@@ -66,7 +66,9 @@ For help on using Dewhiten, run this after building it:
     $ ./dewhiten --help
 
 
-Licensing
-=========
-Dewhiten is released under the
-[GPLv3](http://www.gnu.org/licenses/gpl.html) license.
+License
+=======
+
+This package is released under the
+[MIT License](http://www.opensource.org/licenses/mit-license.php).
+(See LICENSE.txt.)
