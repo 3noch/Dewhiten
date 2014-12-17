@@ -1,4 +1,4 @@
-Itroduction
+Introduction
 ============
 Dewhiten is a small utility for formatting white space in code source
 files. It removes extraneous white space at the ends of lines,
